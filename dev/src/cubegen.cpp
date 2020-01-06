@@ -168,6 +168,15 @@ nfr("cg_palette_to_color", "block,paletteindex", "RI", "F}:4",
         vm.PushVec(color2vec(GetVoxels(vm, vm.Pop()).palette[p]));
     });
 
+nfr("cg_set_palette_color", "block,paletteindex,color", "RIF}:4", "",
+    "sets the color at a palette index.",
+    [](VM &vm) {
+        auto color = vm.PopVec<float4>();
+        auto p = uchar(vm.Pop().ival());
+        auto &v = GetVoxels(vm, vm.Pop());
+		v.palette[p] = quantizec(color);
+    });
+
 nfr("cg_copy_palette", "fromworld,toworld", "RR", "", "",
     [](VM &vm, Value &fromworld, Value &toworld) {
         auto &w1 = GetVoxels(vm, fromworld);
